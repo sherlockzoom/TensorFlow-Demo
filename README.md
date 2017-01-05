@@ -1,3 +1,12 @@
+环境:
+
++ ubuntu16.04 
++ python==2.7.12
++ tensorflow==0.10.0rc0
+
+> `tensorflow_py2` 是基于我的环境创建的VirtualEnv
+
+---
 ## 基本使用
 使用 TensorFlow, 你必须明白 TensorFlow:
 
