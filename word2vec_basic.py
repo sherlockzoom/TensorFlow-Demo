@@ -1,5 +1,5 @@
 # coding=utf-8
-# word2vec_basic --  skip-model
+# word2vec_basic 代码注释--  skip-model
 
 import tensorflow.python.platform
 import collections
@@ -14,8 +14,9 @@ import zipfile
 # Step 1: Download the data.
 url = 'http://mattmahoney.net/dc/'
 
+# text8.zip 数据格式 每一个行是一个句子,其中词按照空格分隔  <w1 w2 w3 ...>
 
-# 下载训练测试文件(需要梯子)
+# 下载训练测试文件
 def maybe_download(filename, expected_bytes):
     """Download a file if not present, and make sure it's the right size."""
     if not os.path.exists(filename):
@@ -38,6 +39,8 @@ filename = maybe_download('text8.zip', 31344016)
 def read_data(filename):
     f = zipfile.ZipFile(filename)
     for name in f.namelist():
+        # print f.read(name)
+        # exit()
         return f.read(name).split()
     f.close()
 
@@ -51,12 +54,12 @@ vocabulary_size = 50000
 
 
 def build_dataset(words):
-    count = [['UNK', -1]]
+    count = [['UNK', -1]]   # 存放word和word出现次数的统计
     count.extend(collections.Counter(words).most_common(vocabulary_size - 1))
     dictionary = dict()
     for word, _ in count:
         dictionary[word] = len(dictionary)  # dictionary<key:word, value:index>, word2idx 词到索引映射
-    data = list()
+    data = list()  # 存放word索引
     unk_count = 0
     for word in words:
         if word in dictionary:
@@ -78,6 +81,7 @@ data_index = 0
 
 
 # Step 4: Function to generate a training batch for the skip-gram model.
+# 生成训练skip-model所用的batch数据
 def generate_batch(batch_size, num_skips, skip_window):
     global data_index
     assert batch_size % num_skips == 0
@@ -85,7 +89,7 @@ def generate_batch(batch_size, num_skips, skip_window):
     batch = np.ndarray(shape=(batch_size), dtype=np.int32)
     labels = np.ndarray(shape=(batch_size, 1), dtype=np.int32)
     span = 2 * skip_window + 1  # [ skip_window target skip_window ]
-    buffer = collections.deque(maxlen=span)
+    buffer = collections.deque(maxlen=span)  # 创建一个固定大小的队列,此处为span
     for _ in range(span):
         buffer.append(data[data_index])
         data_index = (data_index + 1) % len(data)
@@ -104,13 +108,16 @@ def generate_batch(batch_size, num_skips, skip_window):
 
 
 batch, labels = generate_batch(batch_size=8, num_skips=2, skip_window=1)
+
 for i in range(8):
     print batch[i], '->', labels[i, 0]
     print reverse_dictionary[batch[i]], '->', reverse_dictionary[labels[i, 0]]
+
 # Step 5: Build and train a skip-gram model.
+# 给定目标预测上下文
 batch_size = 128
-embedding_size = 128  # Dimension of the embedding vector.
-skip_window = 1  # How many words to consider left and right.
+embedding_size = 128  # Dimension of the embedding vector. 词向量维度
+skip_window = 1  # How many words to consider left and right. 上下文窗口大小
 num_skips = 2  # How many times to reuse an input to generate a label.
 # We pick a random validation set to sample nearest neighbors. Here we limit the
 # validation samples to the words that have a low numeric ID, which by
@@ -118,7 +125,7 @@ num_skips = 2  # How many times to reuse an input to generate a label.
 valid_size = 16  # Random set of words to evaluate similarity on.
 valid_window = 100  # Only pick dev samples in the head of the distribution.
 valid_examples = np.array(random.sample(xrange(valid_window), valid_size))
-num_sampled = 64  # Number of negative examples to sample.
+num_sampled = 64  # Number of negative examples to sample. 负例抽样个数
 graph = tf.Graph()
 with graph.as_default():
     # Input data.
