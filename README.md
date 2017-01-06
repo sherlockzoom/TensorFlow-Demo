@@ -4,7 +4,6 @@
 + python==2.7.12
 + tensorflow==0.10.0rc0
 
-> `tensorflow_py2-venv` 是基于我的环境创建的VirtualEnv
 
 ---
 ## 基本使用

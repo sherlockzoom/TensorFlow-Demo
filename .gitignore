@@ -1,3 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 *.pyc
 MNIST/*
+将删除 .idea/TensorFlow-Demo.iml
+将删除 .idea/misc.xml
+将删除 .idea/modules.xml
+将删除 .idea/workspace.xml
+将删除 .ipynb_checkpoints/
+将删除 MNIST/
