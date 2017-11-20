@@ -1,5 +1,5 @@
 # coding=utf-8
-import tensorflow as tf
+import tensorflow as tf  # tensorflow==1.4
 import base64
 import matplotlib.pyplot as plt
 
