@@ -7,3 +7,4 @@ MNIST/*
 将删除 .idea/workspace.xml
 将删除 .ipynb_checkpoints/
 将删除 MNIST/
+.idea
